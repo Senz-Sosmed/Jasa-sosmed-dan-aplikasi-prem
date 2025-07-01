@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jasa Sosmed - Senz Sosmed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background-color: #f7f9fc;
+      color: #333;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.6;
+    }
+
+    /* Dark Mode */
+    body.dark {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+      position: relative; /* Penting untuk positioning absolute anak-anaknya */
+    }
+    body.dark header {
+      background-color: #2a2a2a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    header .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    header .logo-section img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+      box-shadow: 0 0 0 3px #007bff, 0 0 0 6px #ff69b4; /* Added a subtle border effect */
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #007bff;
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    body.dark header h1 {
+      color: #64b5f6;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.1);
+    }
+    header .subtext {
+      font-size: 0.95rem;
+      color: #777;
+      width: 100%;
+      text-align: center;
+      margin-top: 5px;
+    }
+    body.dark header .subtext {
+      color: #bbb;
+    }
+
+    /* Menu Button & Content */
+    .menu-button {
+      background: none;
+      border: none;
+      font-size: 2rem; /* Larger for better touch target */
+      color: #333;
+      cursor: pointer;
+      padding: 0.5rem;
+      position: absolute; /* Tetap absolute untuk posisi di pojok kanan */
+      right: 1.5rem;
+      top: 1rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    body.dark .menu-button {
+      color: #f0f0f0;
+    }
+    .menu-button:hover {
+      transform: scale(1.1);
+      color: #007bff;
+    }
+    body.dark .menu-button:hover {
+      color: #64b5f6;
+    }
+
+    .menu-content {
+      display: none;
+      position: absolute; /* Posisi akan diatur oleh JavaScript */
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      z-index: 999; /* Z-index tinggi agar muncul di atas elemen lain */
+      min-width: 200px;
+      transform-origin: top right;
+      animation: fadeInScale 0.3s ease-out forwards;
+    }
+    body.dark .menu-content {
+      background-color: #3a3a3a;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .menu-content a {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px; /* Larger padding */
+      text-decoration: none;
+      color: #333;
+      font-size: 1.05rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    body.dark .menu-content a {
+      color: #f0f0f0;
+    }
+    .menu-content a img {
+      width: 24px; /* Larger icons */
+      height: 24px;
+      margin-right: 12px;
+    }
+    .menu-content a:hover {
+      background-color: #f0f8ff; /* Lighter hover */
+      color: #007bff;
+    }
+    body.dark .menu-content a:hover {
+      background-color: #4a4a4a;
+      color: #64b5f6;
+    }
+    .show-menu {
+      display: block;
+    }
+
+    /* Popup Info */
+    .popup-info {
+      background-color: #e6f7ff;
+      padding: 1.2rem;
+      text-align: justify;
+      font-size: 0.98rem;
+      color: #2196f3;
+      margin: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      font-weight: 500;
+      line-height: 1.5;
+      border-left: 5px solid #2196f3;
+    }
+    body.dark .popup-info {
+      background-color: #1e3a5f;
+      color: #90caf9;
+      border-left: 5px solid #90caf9;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      margin: 1.5rem;
+    }
+    .search-bar input {
+      padding: 14px 25px; /* Larger padding */
+      width: calc(100% - 50px); /* Adjust for padding */
+      border-radius: 30px; /* More rounded */
+      border: 1px solid #ddd;
+      font-size: 1.05rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .search-bar input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    }
+    body.dark .search-bar input {
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+    body.dark .search-bar input:focus {
+      border-color: #64b5f6;
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+    }
+
+    /* Filters */
+    .filters {
+      margin: 0 1.5rem 1.5rem; /* Added bottom margin */
+      display: flex;
+      gap: 0.75rem; /* Increased gap */
+      flex-wrap: wrap;
+      justify-content: center; /* Center buttons */
+    }
+    .filters button {
+      padding: 8px 16px; /* Larger padding */
+      border: none;
+      border-radius: 25px; /* More rounded */
+      background-color: #e0e0e0;
+      color: #555;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .filters button:hover:not(.active) {
+      background-color: #d0d0d0;
+      transform: translateY(-2px);
+    }
+    .filters button.active {
+      background-color: #007bff;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+    }
+    body.dark .filters button {
+      background-color: #444;
+      color: #ccc;
+    }
+    body.dark .filters button:hover:not(.active) {
+      background-color: #555;
+    }
+    body.dark .filters button.active {
+      background-color: #64b5f6;
+      color: white;
+      box-shadow: 0 2px 5px rgba(100, 181, 246, 0.3);
+    }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Default 2 columns for mobile */
+      gap: 1.5rem; /* Increased gap */
+      padding: 1.5rem;
+      max-width: 1200px; /* Max width for desktop */
+      margin: 0 auto; /* Center the grid */
+    }
+
+    /* Product Card */
+    .product-card {
+      background-color: white;
+      padding: 1.2rem; /* Increased padding */
+      border-radius: 20px; /* More rounded */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden; /* For badge positioning */
+
+      /* Initial hidden state for animation */
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .product-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02); /* More pronounced hover */
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    body.dark .product-card {
+      background-color: #1f1f1f;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    body.dark .product-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    }
+    .product-card img {
+      width: 60px; /* Larger icons */
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 0.75rem;
+    }
+    .product-card h3 {
+      font-size: 1.05rem; /* Slightly larger text */
+      margin: 0.5rem 0 1rem; /* Adjust margin */
+      color: #333;
+    }
+    body.dark .product-card h3 {
+      color: #f0f0f0;
+    }
+    .product-card a {
+      background-color: #ff69b4;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px; /* Larger button */
+      border-radius: 30px;
+      display: inline-block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4);
+    }
+    .product-card a:hover {
+      background-color: #ff4d94;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.6);
+    }
+
+    /* Badges */
+    .badge {
+      position: absolute;
+      top: 5px; /* Pindahkan sedikit ke bawah */
+      right: 5px; /* Pindahkan sedikit ke kiri */
+      background-color: #ff4d4d;
+      color: white;
+      padding: 4px 8px; /* Sedikit perkecil padding */
+      border-radius: 10px; /* Sedikit perkecil radius */
+      font-size: 0.75rem; /* Sedikit perkecil font */
+      font-weight: bold;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .badge.rekom {
+      background-color: #28a745;
+    }
+    .badge.diskon {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    /* No Result */
+    #noResult {
+      text-align: center;
+      color: #999;
+      padding: 2rem;
+      font-weight: 500;
+      font-size: 1.1rem;
+      display: none; /* Hidden by default, shown by JS */
+    }
+    body.dark #noResult {
+      color: #bbb;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #fff;
+      color: #666;
+      text-align: center;
+      padding: 1.5rem; /* Increased padding */
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      margin-top: 2rem; /* Added top margin */
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+    body.dark .footer {
+      background-color: #1f1f1f;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+    body.dark .footer a {
+      color: #88c9ff;
+    }
+    body.dark .footer a:hover {
+      color: #5bbad5;
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 600px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+      }
+      header .logo-section {
+        width: auto;
+        margin-bottom: 0;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      header .subtext {
+        text-align: left;
+        width: auto;
+        margin-left: 15px;
+        font-size: 1rem;
+      }
+      .menu-button {
+        position: static; /* Kembali ke posisi statis di desktop */
+      }
+      .menu-content {
+        /* Di desktop, posisikan relatif terhadap header lagi jika tombolnya statis */
+        /* Atau bisa juga tetap diatur JS, tapi ini lebih sederhana */
+        top: 4rem; /* Sesuaikan berdasarkan tinggi header di desktop */
+        right: 2rem; /* Cocokkan dengan padding header */
+      }
+      .popup-info, .search-bar, .filters {
+        margin-left: 2rem;
+        margin-right: 2rem;
+      }
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on tablet */
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 900px) {
+      header {
+        padding: 1rem 3rem;
+      }
+      header .logo-section img {
+        width: 60px;
+        height: 60px;
+      }
+      header h1 {
+        font-size: 2.2rem;
+      }
+      header .subtext {
+        font-size: 1.05rem;
+      }
+      .menu-content {
+        top: 4.5rem; /* Penyesuaian lebih lanjut untuk desktop besar */
+        right: 3rem; /* Cocokkan dengan padding header */
+      }
+      .popup-info, .search-bar, .filters {
+        margin-left: 3rem;
+        margin-right: 3rem;
+      }
+      .product-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+        padding: 2.5rem;
+      }
+      .product-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .product-grid {
+        grid-template-columns: repeat(5, 1fr); /* 5 columns on very large screens */
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-section">
+      <img src="https://iili.io/F73uh6G.jpg" alt="senz logo">
+      <h1>Senz Sosmed</h1>
+    </div>
+    <div class="subtext">Jasa sosmed dan app premium terpercaya</div>
+    <button class="menu-button" id="menuButton" onclick="toggleMenu()">☰</button>
+    <div class="menu-content" id="menu">
+      <a href="https://wa.me/6281572115877" target="_blank"><img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" alt="WhatsApp Icon"/>Contact Person</a>
+      <a href="https://www.instagram.com/senz_sosmed" target="_blank"><img src="https://img.icons8.com/fluency/48/instagram-new.png" alt="Instagram Icon"/>Testimoni</a>
+      <a href="#" onclick="toggleDarkMode()">🌙 Dark Mode</a>
+    </div>
+  </header>
+
+  <div class="popup-info">
+    Silakan pilih produk yang kamu inginkan. Nanti kamu akan otomatis diarahkan ke WhatsApp Senz Sosmed untuk proses pemesanan. Terima kasih! 🙏😺
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Cari layanan...">
+  </div>
+
+  <div class="filters">
+    <button class="active" data-category="all" onclick="filterCategory('all', this)">Semua</button>
+    <button data-category="followers" onclick="filterCategory('followers', this)">Followers</button>
+    <button data-category="likes" onclick="filterCategory('likes', this)">Likes</button>
+    <button data-category="views" onclick="filterCategory('views', this)">Views</button>
+    <button data-category="subscribers" onclick="filterCategory('subscribers', this)">Subscribers</button>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+
+  <!-- Followers Instagram Indo -->
+  <div class="product-card" data-category="followers">
+    <span class="badge rekom">REKOM</span>
+    <img src="https://img.icons8.com/color/96/000000/instagram-new.png" alt="Instagram">
+    <h3>Followers Instagram Indo</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20tertarik%20dengan%20layanan%20*Followers%20Instagram%20Indo*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- Followers Instagram Bule -->
+  <div class="product-card" data-category="followers">
+    <span class="badge">TERLARIS</span>
+    <img src="https://img.icons8.com/color/96/000000/instagram-new.png" alt="Instagram">
+    <h3>Followers Instagram Bule</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20mau%20pesan%20*Followers%20Instagram%20Bule*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- Followers TikTok Indo -->
+  <div class="product-card" data-category="followers">
+    <span class="badge rekom">REKOM</span>
+    <img src="https://img.icons8.com/?size=100&id=118638&format=png&color=000000" alt="TikTok">
+    <h3>Followers TikTok Indo</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20tertarik%20dengan%20layanan%20*Followers%20TikTok%20Indo*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- Followers TikTok Bule -->
+  <div class="product-card" data-category="followers">
+    <span class="badge">TERLARIS</span>
+    <img src="https://img.icons8.com/?size=100&id=118638&format=png&color=000000" alt="TikTok">
+    <h3>Followers TikTok Bule</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20mau%20pesan%20*Followers%20TikTok%20Bule*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- Likes Facebook -->
+  <div class="product-card" data-category="likes">
+    <span class="badge diskon">DISKON</span>
+    <img src="https://img.icons8.com/?size=100&id=118638&format=png&color=000000" alt="tiktok">
+    <h3>Views Tiktok</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20mau%20pesan%20*vies%20tiktok*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- Likes Facebook (duplicate - assuming this is intentional for demo) -->
+  <div class="product-card" data-category="likes">
+    <span class="badge diskon">DISKON</span>
+    <img src="https://img.icons8.com/color/96/000000/facebook-new.png" alt="Facebook">
+    <h3>Followers Facebook</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20mau%20pesan%20*Followers%20Facebook*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- New Product Card Example: Views YouTube -->
+  <div class="product-card" data-category="views">
+    <span class="badge rekom">BARU</span>
+    <img src="https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube">
+    <h3>Views YouTube</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20tertarik%20dengan%20layanan%20*Views%20YouTube*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+  <!-- New Product Card Example: Subscribers YouTube -->
+  <div class="product-card" data-category="subscribers">
+    <span class="badge">TERPOPULER</span>
+    <img src="https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube">
+    <h3>Subscribers YouTube</h3>
+    <a href="https://wa.me/6281572115877?text=Halo%20kak,%20saya%20tertarik%20dengan%20layanan%20*Subscribers%20YouTube*.%20Boleh%20info%20detail%20dan%20harganya?" target="_blank">Pilih</a>
+  </div>
+
+</div>
+  <div id="noResult">Produk tidak ditemukan.</div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Senz Sosmed. | Jasa Sosmed dan App Premium Aman & Terpercaya. <a href="https://wa.me/6281572115877" target="_blank">📞 Hubungi Kami</a></p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const productCards = document.querySelectorAll('.product-card');
+    const filterButtons = document.querySelectorAll('.filters button');
+    const noResultDiv = document.getElementById('noResult');
+    const productGrid = document.getElementById('productGrid');
+    const menu = document.getElementById('menu');
+    const menuButton = document.getElementById('menuButton'); // Ambil elemen tombol menu
+
+    let observer; // Declare observer globally
+
+    // Function to apply filters and search
+    function applyFiltersAndSearch() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const activeCategoryButton = document.querySelector('.filters button.active');
+      const activeCategory = activeCategoryButton ? activeCategoryButton.dataset.category : 'all';
+
+      let found = false;
+      const cardsToObserve = []; // Collect cards that become visible
+
+      productCards.forEach(card => {
+        const cardText = card.querySelector('h3').textContent.toLowerCase();
+        const cardCategory = card.getAttribute('data-category');
+
+        const matchesSearch = cardText.includes(searchTerm);
+        const matchesCategory = (activeCategory === 'all' || cardCategory === activeCategory);
+
+        if (matchesSearch && matchesCategory) {
+          card.style.display = 'block'; // Make sure the card is displayed
+          cardsToObserve.push(card); // Add to list for observation
+          found = true;
+        } else {
+          card.style.display = 'none'; // Hide the card
+          card.classList.remove('show'); // Remove 'show' class if hidden
+          if (observer) { // If observer exists, unobserve hidden cards
+            observer.unobserve(card);
+          }
+        }
+      });
+
+      noResultDiv.style.display = found ? 'none' : 'block';
+
+      // Re-observe only the cards that are now visible
+      if (observer) {
+        cardsToObserve.forEach(card => {
+          card.classList.remove('show'); // Reset animation state before re-observing
+          observer.observe(card);
+        });
+      }
+    }
+
+    // Event Listeners for Search and Filters
+    searchInput.addEventListener('input', applyFiltersAndSearch);
+
+    function filterCategory(category, clickedButton) {
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      clickedButton.classList.add('active');
+      applyFiltersAndSearch(); // Re-apply all filters
+    }
+
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      // Save dark mode preference to local storage
+      if (document.body.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    }
+
+    // Check for dark mode preference on load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark');
+      }
+      // Call applyFiltersAndSearch first to set initial display state
+      applyFiltersAndSearch();
+      initializeAnimations();
+    });
+
+    // Toggle Menu
+    function toggleMenu() {
+      // Toggle the 'show-menu' class first
+      menu.classList.toggle('show-menu');
+
+      // If showing, calculate and set position
+      if (menu.classList.contains('show-menu')) {
+        const buttonRect = menuButton.getBoundingClientRect();
+
+        // Hitung posisi top menu: bawah tombol + 10px (untuk sedikit jarak) + scrollY (untuk posisi absolut yang benar)
+        menu.style.top = (buttonRect.bottom + window.scrollY + 10) + 'px';
+        // Hitung posisi right menu: lebar viewport - posisi kanan tombol (agar sejajar di kanan)
+        menu.style.right = (window.innerWidth - buttonRect.right) + 'px';
+      }
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      // Pastikan menu dan tombol ada sebelum memeriksa
+      if (menu && menuButton && !menu.contains(e.target) && !menuButton.contains(e.target)) {
+        menu.classList.remove('show-menu');
+      }
+    });
+
+    // Intersection Observer for scroll animations
+    function initializeAnimations() {
+      // Create a new observer instance if it doesn't exist
+      if (!observer) {
+        const observerOptions = {
+          root: null, // viewport
+          rootMargin: '0px',
+          threshold: 0.2 // Trigger when 20% of the item is visible
+        };
+
+        observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('show');
+              obs.unobserve(entry.target); // Stop observing once animated
+            }
+          });
+        }, observerOptions);
+      }
+
+      // Observe all currently visible product cards
+      productCards.forEach(card => {
+        // Only observe if the card is currently displayed
+        if (card.style.display !== 'none') {
+          observer.observe(card);
+        }
+      });
+    }
+
+  </script>
+</body>
+</html>
+
